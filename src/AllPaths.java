@@ -6,6 +6,8 @@ import java.util.Stack;
 
 /**
  * Created by Vegar on 02.11.2015.
+ * Imported from prinecton's site. Uses dfs to find and print all paths.
+ * source - http://introcs.cs.princeton.edu/java/45graph/AllPaths.java.html
  */
 public class AllPaths<Vertex> {
 
