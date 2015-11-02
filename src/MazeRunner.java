@@ -1,8 +1,8 @@
+import edu.princeton.cs.algs4.BreadthFirstPaths;
 import edu.princeton.cs.algs4.Graph;
 import edu.princeton.cs.algs4.In;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 /**
@@ -14,6 +14,7 @@ public class MazeRunner {
     static In in = new In(file);
     static Graph graph = new Graph(600);
     static DepthFirstSearch dfs;
+    static BreadthFirstPaths bfs;
     static ArrayList<Integer> exits = new ArrayList();
 
 
@@ -21,8 +22,10 @@ public class MazeRunner {
         createMaze();
         makeEdges();
         dfs();
-        findPossibleExits();
-        System.out.println(connected(598));
+        findShortestPathToExits();
+        System.out.println();
+        AllPaths ap = new AllPaths(graph, 1,209);
+
     }
 
     /**
@@ -45,22 +48,53 @@ public class MazeRunner {
     /**
      * Finds possible exits
      */
-    private static void findPossibleExits(){
+    private static void findShortestPathToExits(){
+        BreadthFirstPaths bf = firstPossibleExits();
+        System.out.println("Shortest path to every exits, from the first one found: ");
         for(int i = 0; i<maze.size();i++){
-            if(i < 30 && maze.get(i).equals('1'))
+            if(i < 30 && maze.get(i).equals('1')) {
                 exits.add(i);
+                System.out.println(bf.pathTo(i));
+            }
             if(i>0)
-                if(i%30==0 && maze.get(i-1).equals('1'))
-                    exits.add(i-1);
-            if(i%30==0 && maze.get(i).equals('1'))
+                if(i%30==0 && maze.get(i-1).equals('1')) {
+                    exits.add(i - 1);
+                    System.out.println(bf.pathTo(i - 1));
+                }
+            if(i%30==0 && maze.get(i).equals('1')) {
                 exits.add(i);
-            if(i>569 && i<601 && maze.get(i).equals('1'))
+                System.out.println(bf.pathTo(i));
+            }
+            if(i>569 && i<601 && maze.get(i).equals('1')) {
                 exits.add(i);
-        }
+                System.out.println(bf.pathTo(i));
+            }
+        }/**
         System.out.println("\nPossible exits: ");
         for(int i : exits){
             System.out.println(i);
         }
+         */
+    }
+
+    private static BreadthFirstPaths firstPossibleExits(){
+        BreadthFirstPaths bf;
+        for(int i = 0; i<maze.size();i++){
+            if(i < 30 && maze.get(i).equals('1'))
+               return bf = new BreadthFirstPaths(graph,i);
+
+            if(i>0)
+                if(i%30==0 && maze.get(i-1).equals('1'))
+                   return bf = new BreadthFirstPaths(graph,i-1);
+
+            if(i%30==0 && maze.get(i).equals('1'))
+                return bf = new BreadthFirstPaths(graph,i);
+
+            if(i>569 && i<601 && maze.get(i).equals('1'))
+                return bf = new BreadthFirstPaths(graph,i);
+
+        }
+        return bf = null;
     }
 
     /**

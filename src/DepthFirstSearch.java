@@ -30,7 +30,7 @@ public class DepthFirstSearch {
         marked[v] = true;
         for (int w : G.adj(v)) {
             if (!marked[w]) {
-                System.out.println(v + " - " + w);
+                //System.out.println(v + " - " + w);
                 dfs(G, w);
             }
         }
