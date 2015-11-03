@@ -45,10 +45,13 @@ public class MST {
     private static class Vertex{
         int number;
         double weight;
+        Vertex[] adj = new Vertex[vertexList.size()];
+        boolean[]marked = new boolean[1];
 
         public Vertex(int number, double weight) {
             this.number = number;
             this.weight = weight;
+            marked[0] = false;
         }
 
         public int getNumber() {
