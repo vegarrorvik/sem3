@@ -2,6 +2,8 @@ import edu.princeton.cs.algs4.Edge;
 import edu.princeton.cs.algs4.IndexMinPQ;
 import edu.princeton.cs.algs4.UF;
 
+import java.util.ArrayList;
+
 /**
  * Created by Vegar on 03.11.2015.
  */
@@ -12,6 +14,9 @@ public class PrimMST {
     private double[] distTo;      // distTo[v] = weight of shortest such edge
     private boolean[] marked;     // marked[v] = true if v on tree, false otherwise
     private IndexMinPQ<Double> pq;
+    public ArrayList<ArrayList<Edge>> subtrees = new ArrayList<>();
+    public ArrayList<Integer> minimumVertices = new ArrayList<>();
+
 
     /**
      * Compute a minimum spanning tree (or forest) of an edge-weighted graph.
@@ -26,20 +31,44 @@ public class PrimMST {
             distTo[v] = Double.POSITIVE_INFINITY;
 
         for (int v = 0; v < G.V(); v++)      // run from each vertex to find
-            if (!marked[v]) prim(G, v);      // minimum spanning forest
+            if (!marked[v])
+                prim(G, v);// minimum spanning forest
 
         // check optimality conditions
         assert check(G);
     }
 
+    public ArrayList<Edge> allEdges() {
+        ArrayList<Edge> al = new ArrayList<>();
+        for (int v = 0; v < edgeTo.length; v++) {
+            Edge e = edgeTo[v];
+            if (e != null) {
+                al.add(e);
+            }
+        }
+        return al;
+    }
+
     // run Prim's algorithm in graph G, starting from vertex s
     private void prim(EdgeWeightedGraph G, int s) {
+        ArrayList<Integer> nodes = new ArrayList<>();
         distTo[s] = 0.0;
         pq.insert(s, distTo[s]);
         while (!pq.isEmpty()) {
             int v = pq.delMin();
+            nodes.add(v);
             scan(G, v);
         }
+        ArrayList<Edge> subtree = new ArrayList<>();
+
+        for(int n : nodes){
+            Edge e = edgeTo[n];
+            if(e != null)
+                subtree.add(e);
+        }
+        subtrees.add(subtree);
+        //Today I learned
+        minimumVertices.add(nodes.stream().min((n,m) -> newMST.weights.get(n).compareTo(newMST.weights.get(m))).get());
     }
 
     // scan vertex v
@@ -142,5 +171,9 @@ public class PrimMST {
         }
 
         return true;
+    }
+
+    public int numberOfTrees(){
+        return subtrees.size()-1;
     }
 }
