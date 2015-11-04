@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class MazeRunner {
     static ArrayList maze = new ArrayList();
-    static File file = new File("compAss3/data/sm20x30.txt");
+    static File file = new File("compAss3/data/simplemaze20x30.txt");
     static In in = new In(file);
     static Graph graph = new Graph(600);
     static DepthFirstSearch dfs;
@@ -20,11 +20,11 @@ public class MazeRunner {
 
     public static void main(String[]args){
         createMaze();
+        printMaze();
         makeEdges();
         dfs();
-        findShortestPathToExits();
+        findShortestPathToExit();
         System.out.println();
-        AllPaths ap = new AllPaths(graph, 1,209);
 
     }
 
@@ -36,7 +36,8 @@ public class MazeRunner {
             maze.add(in.readChar());
         }
 
-        //Fikk problem med å gjere dette mens eg las inn
+        //Had some problems adding characters, new lines where included, tried to not add them
+        //but got into some issues - reason is unknown. Therefore an unsexy method is the result
         for(int i = 0; i<maze.size();i++){
             if(maze.get(i).equals('\n'))
                 maze.remove(i);
@@ -45,56 +46,45 @@ public class MazeRunner {
         maze.remove(600);
     }
 
-    /**
-     * Finds possible exits
-     */
-    private static void findShortestPathToExits(){
-        BreadthFirstPaths bf = firstPossibleExits();
-        System.out.println("Shortest path to every exits, from the first one found: ");
-        for(int i = 0; i<maze.size();i++){
-            if(i < 30 && maze.get(i).equals('1')) {
+    private static void exits(){
+        for (int i = 0; i < maze.size(); i++) {
+            if (i < 30 && maze.get(i).equals('1')) {
                 exits.add(i);
-                System.out.println(bf.pathTo(i));
             }
-            if(i>0)
-                if(i%30==0 && maze.get(i-1).equals('1')) {
+            if (i > 0)
+                if (i % 30 == 0 && maze.get(i - 1).equals('1')) {
                     exits.add(i - 1);
-                    System.out.println(bf.pathTo(i - 1));
                 }
-            if(i%30==0 && maze.get(i).equals('1')) {
+            if (i % 30 == 0 && maze.get(i).equals('1')) {
                 exits.add(i);
-                System.out.println(bf.pathTo(i));
             }
-            if(i>569 && i<601 && maze.get(i).equals('1')) {
+            if (i > 569 && i < 601 && maze.get(i).equals('1')) {
                 exits.add(i);
-                System.out.println(bf.pathTo(i));
             }
-        }/**
-        System.out.println("\nPossible exits: ");
-        for(int i : exits){
-            System.out.println(i);
         }
-         */
     }
 
-    private static BreadthFirstPaths firstPossibleExits(){
+    private static void findShortestPathToExit(){
+        exits();
         BreadthFirstPaths bf;
-        for(int i = 0; i<maze.size();i++){
-            if(i < 30 && maze.get(i).equals('1'))
-               return bf = new BreadthFirstPaths(graph,i);
+        int shortestPath = Integer.MAX_VALUE;
+        int shortestK = Integer.MAX_VALUE, shortestJ = Integer.MAX_VALUE;
+        ArrayList<Integer> sadFace = new ArrayList<>();
 
-            if(i>0)
-                if(i%30==0 && maze.get(i-1).equals('1'))
-                   return bf = new BreadthFirstPaths(graph,i-1);
-
-            if(i%30==0 && maze.get(i).equals('1'))
-                return bf = new BreadthFirstPaths(graph,i);
-
-            if(i>569 && i<601 && maze.get(i).equals('1'))
-                return bf = new BreadthFirstPaths(graph,i);
-
+        System.out.println("\nShortest path for each pair of exits");
+        for(int j:exits) {
+            bf = new BreadthFirstPaths(graph,j);
+            for(int k:exits) {
+                if(j!=k && !(sadFace.contains(j) && sadFace.contains(k)))
+                    System.out.println(bf.pathTo(k));
+                if(bf.distTo(k)<shortestPath && j!=k) {
+                    shortestPath = bf.distTo(k);
+                    shortestJ = j; shortestK = k;
+                }sadFace.add(k);
+            }sadFace.add(j);
         }
-        return bf = null;
+        bf = new BreadthFirstPaths(graph,shortestJ);
+        System.out.println("\nShortest path is: " + bf.pathTo(shortestK));
     }
 
     /**
@@ -131,29 +121,7 @@ public class MazeRunner {
      */
     private static void dfs(){
         dfs = new DepthFirstSearch(graph,1);
-        System.out.println(dfs.count());
-    }
-
-    /**
-     * Doesn't work at the moment
-     */
-    private static void printMarked(){
-        final String ANSI_RESET = "\u0018[0m";
-        final String ANSI_RED = "\u0018[31m";
-        for(int i = 0; i<maze.size(); i++){
-            if(i%30==0 && i!=0) {
-                System.out.println();
-                if(dfs.getMarked()[i])
-                    System.out.print(ANSI_RED + maze.get(i) + ANSI_RESET);
-                else
-                    System.out.print(maze.get(i));
-            }
-            else
-                if(dfs.getMarked()[i])
-                    System.out.print(ANSI_RED + maze.get(i) + ANSI_RESET);
-                else
-                    System.out.print(maze.get(i));
-        }
+        System.out.println("\n\nNumber of connected vertices is: "+dfs.count());
     }
 
     /**

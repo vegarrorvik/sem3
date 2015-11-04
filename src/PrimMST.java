@@ -68,7 +68,7 @@ public class PrimMST {
         }
         subtrees.add(subtree);
         //Today I learned
-        minimumVertices.add(nodes.stream().min((n,m) -> newMST.weights.get(n).compareTo(newMST.weights.get(m))).get());
+        minimumVertices.add(nodes.stream().min((n,m) -> VegarMST.weights.get(n).compareTo(VegarMST.weights.get(m))).get());
     }
 
     // scan vertex v

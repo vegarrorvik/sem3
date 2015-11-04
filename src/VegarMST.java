@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Created by Vegar on 03.11.2015.
  */
-public class newMST {
+public class VegarMST {
     static HashMap<Integer,Double> weights = new HashMap<>();
     static File weightFile = new File("compAss3/data/graph_input/test1000000_weights.txt");
     static File tinyF = new File("compAss3/data/graph_input/test1000000.txt");
