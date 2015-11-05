@@ -16,7 +16,7 @@ public class PrimMST {
     private boolean[] marked;     // marked[v] = true if v on tree, false otherwise
     private IndexMinPQ<Double> pq;
     public ArrayList<ArrayList<Edge>> subtrees = new ArrayList<>();
-    public ArrayList<Integer> minimumVertices = new ArrayList<>();
+    public ArrayList<Integer> minimumNode = new ArrayList<>();
 
 
     /**
@@ -39,6 +39,10 @@ public class PrimMST {
         assert check(G);
     }
 
+    /**
+     * All edges in graph
+     * @return array of all edges in the graph
+     */
     public ArrayList<Edge> allEdges() {
         ArrayList<Edge> al = new ArrayList<>();
         for (int v = 0; v < edgeTo.length; v++) {
@@ -50,7 +54,13 @@ public class PrimMST {
         return al;
     }
 
-    // run Prim's algorithm in graph G, starting from vertex s
+    /**
+     * Have modded this to create an array subtrees that has arrays of subtrees in in (all MST's)
+     * Uses stream to find minimumNode in each mst
+     * Still a linear method
+     * @param G graph to run prim on
+     * @param s node
+     */
     private void prim(EdgeWeightedGraph G, int s) {
         ArrayList<Integer> nodes = new ArrayList<>();
         distTo[s] = 0.0;
@@ -69,7 +79,7 @@ public class PrimMST {
         }
         subtrees.add(subtree);
         //Today I learned
-        minimumVertices.add(nodes.stream().min((n,m) -> VegarMST.weights.get(n).compareTo(VegarMST.weights.get(m))).get());
+        minimumNode.add(nodes.stream().min((n, m) -> VegarMST.weights.get(n).compareTo(VegarMST.weights.get(m))).get());
     }
 
     // scan vertex v

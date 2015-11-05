@@ -28,7 +28,7 @@ public class MazeRunner {
     }
 
     /**
-     * Creates an ArrayList maze, with all vertices
+     * Creates an ArrayList maze, with all nodes
      */
     private static void createMaze(){
         while(in.hasNextChar()) {
@@ -45,6 +45,9 @@ public class MazeRunner {
         maze.remove(600);
     }
 
+    /**
+     * Saves exits found in the array exits
+     */
     private static void exits(){
         for (int i = 0; i < maze.size(); i++) {
             if (i < 30 && maze.get(i).equals('1')) {
@@ -63,6 +66,9 @@ public class MazeRunner {
         }
     }
 
+    /**
+     * Finds and prints the shortest path between a pair of exit points
+     */
     private static void findShortestPathToExit(){
         exits();
         BreadthFirstPaths bf;

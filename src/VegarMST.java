@@ -72,10 +72,10 @@ public class VegarMST {
      * @param mst the mst where the specific info is saved, instanciated in main
      */
     private static void connectTrees(EdgeWeightedGraph graph, PrimMST mst){
-        mst.minimumVertices.remove(0);
-        Integer minVertex = mst.minimumVertices.stream().min((n,m)->weights.get(n).compareTo(weights.get(m))).get();
+        mst.minimumNode.remove(0);
+        Integer minVertex = mst.minimumNode.stream().min((n,m)->weights.get(n).compareTo(weights.get(m))).get();
 
-        for(Integer i : mst.minimumVertices){
+        for(Integer i : mst.minimumNode){
             if(i != minVertex){
                 double weight = weights.get(i) + weights.get(minVertex);
                 Edge e = new Edge(i,minVertex, weight){
