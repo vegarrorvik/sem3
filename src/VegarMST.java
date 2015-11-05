@@ -1,18 +1,17 @@
 import edu.princeton.cs.algs4.*;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by Vegar on 03.11.2015.
+ * Where I create EdgeWeightedGraph, connects MST's, prints trees and makes the weight hashmap.
+ * Main at the bottomn
  */
 public class VegarMST {
     static HashMap<Integer,Double> weights = new HashMap<>();
-    static File weightFile = new File("compAss3/data/graph_input/test1000000_weights.txt");
-    static File tinyF = new File("compAss3/data/graph_input/test1000000.txt");
-    static In in = new In(tinyF);
-    static int V, E;
+    static File weightFile = new File("compAss3/data/tinyF_weights.txt");
+    static File tinyF = new File("compAss3/data/tinyF.txt");
     static EdgeWeightedGraph graph;
 
     /**
@@ -32,6 +31,11 @@ public class VegarMST {
         }
     }
 
+    /**
+     * Makes the edgeWeightedTree to use in PrimMST
+     * @param file to make the EdgeWeightedTree from
+     * @return an edgeWeightedTree
+     */
     private static EdgeWeightedGraph readEdges(File file){
         In in = new In(file);
         int V = in.readInt();
@@ -52,6 +56,21 @@ public class VegarMST {
         }
         return graph;
     }
+
+    private static void printTrees(PrimMST pmst){
+        for(int i = 1; i<pmst.subtrees.size();i++){
+            System.out.println();
+            for(int j = 0; j<pmst.subtrees.get(i).size();j++){
+                System.out.println(pmst.subtrees.get(i).get(j));
+            }
+        }
+    }
+
+    /**
+     *
+     * @param graph the graph to connect the different MST's
+     * @param mst the mst where the specific info is saved, instanciated in main
+     */
     private static void connectTrees(EdgeWeightedGraph graph, PrimMST mst){
         mst.minimumVertices.remove(0);
         Integer minVertex = mst.minimumVertices.stream().min((n,m)->weights.get(n).compareTo(weights.get(m))).get();
@@ -77,22 +96,13 @@ public class VegarMST {
 
         PrimMST pmst = new PrimMST(graph);
         int numberOfTrees = pmst.numberOfTrees();
+
+       // printTrees(pmst);
+
         connectTrees(graph,pmst);
         pmst = new PrimMST(graph);
 
-       // System.out.println("Weight: " + pmst.weight() + "\nNumber of trees: " + pmst.numberOfTrees());
-
-        /**for(Edge e : pmst.edges()){
-            System.out.println(e);
-        }*/
-        /*
-        for(int i = 1; i<pmst.subtrees.size();i++){
-            System.out.println();
-            for(int j = 0; j<pmst.subtrees.get(i).size();j++){
-                System.out.println(pmst.subtrees.get(i).get(j));
-            }
-        }*/
-        System.out.println("Weight: " + pmst.weight() + "\nNumber of trees: " + numberOfTrees);
+        System.out.println("Total weight: " + pmst.weight() + "\nNumber of trees: " + numberOfTrees);
         System.out.println("Elapsed time: " + stopwatch.elapsedTime());
     }
 }

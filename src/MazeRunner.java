@@ -14,7 +14,6 @@ public class MazeRunner {
     static In in = new In(file);
     static Graph graph = new Graph(600);
     static DepthFirstSearch dfs;
-    static BreadthFirstPaths bfs;
     static ArrayList<Integer> exits = new ArrayList();
 
 
@@ -75,12 +74,12 @@ public class MazeRunner {
         for(int j:exits) {
             bf = new BreadthFirstPaths(graph,j);
             for(int k:exits) {
-                if(j!=k && !(sadFace.contains(j) && sadFace.contains(k)))
+                if(j!=k && !sadFace.contains(k))
                     System.out.println(bf.pathTo(k));
                 if(bf.distTo(k)<shortestPath && j!=k) {
                     shortestPath = bf.distTo(k);
                     shortestJ = j; shortestK = k;
-                }sadFace.add(k);
+                }
             }sadFace.add(j);
         }
         bf = new BreadthFirstPaths(graph,shortestJ);

@@ -5,6 +5,7 @@ import java.util.Stack;
 
 /**
  * Created by Vegar on 03.11.2015.
+ * Imported from Algs4 to
  */
 public class EdgeWeightedGraph {
     private static final String NEWLINE = System.getProperty("line.separator");

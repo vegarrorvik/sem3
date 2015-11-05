@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Vegar on 03.11.2015.
+ * PrimMST imported from Algs4 - modded for my use.
  */
 public class PrimMST {
     private static final double FLOATING_POINT_EPSILON = 1E-12;
