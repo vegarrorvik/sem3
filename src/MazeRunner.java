@@ -21,7 +21,7 @@ public class MazeRunner {
         createMaze();
         printMaze();
         makeEdges();
-        dfs();
+        dfs(); //gives number of connected nodes
         findShortestPathToExit();
         System.out.println();
 
@@ -41,7 +41,7 @@ public class MazeRunner {
             if(maze.get(i).equals('\n'))
                 maze.remove(i);
         }
-        //Because screw number 600
+        //Because screw number 600 (probably a problem with a newLine not found - this works well)
         maze.remove(600);
     }
 
@@ -74,19 +74,19 @@ public class MazeRunner {
         BreadthFirstPaths bf;
         int shortestPath = Integer.MAX_VALUE;
         int shortestK = Integer.MAX_VALUE, shortestJ = Integer.MAX_VALUE;
-        ArrayList<Integer> sadFace = new ArrayList<>();
+        ArrayList<Integer> pathsPrinted = new ArrayList<>();
 
         System.out.println("\nShortest path for each pair of exits");
         for(int j:exits) {
             bf = new BreadthFirstPaths(graph,j);
             for(int k:exits) {
-                if(j!=k && !sadFace.contains(k))
+                if(j!=k && !pathsPrinted.contains(k))
                     System.out.println(bf.pathTo(k));
                 if(bf.distTo(k)<shortestPath && j!=k) {
                     shortestPath = bf.distTo(k);
                     shortestJ = j; shortestK = k;
                 }
-            }sadFace.add(j);
+            }pathsPrinted.add(j);
         }
         bf = new BreadthFirstPaths(graph,shortestJ);
         System.out.println("\nShortest path is: " + bf.pathTo(shortestK));
